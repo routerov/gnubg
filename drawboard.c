@@ -35,6 +35,7 @@
 
 int fClockwise = FALSE;         /* Player 1 moves clockwise */
 
+
 /*
  *  GNU Backgammon  Position ID: 0123456789ABCD 
  *                  Match ID   : 0123456789ABCD
@@ -107,29 +108,57 @@ DrawBoardStd(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
         for (x = 12; x < 18; x++) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
-            *pch++ = ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch,"\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else{
+	      *pch++=' ';
+	    }
+	    *pch++=' ';
         }
 
         *pch++ = '|';
         *pch++ = ' ';
-        *pch++ = anBoard[0][24] > y ? 'O' : ' ';
+	if (anBoard[0][24] > y){
+	  pch += sprintf(pch, "\033[0;31mO\033[0m");
+	}
+	else {
+	  *pch++ = ' ';
+	}
         *pch++ = ' ';
         *pch++ = '|';
 
         for (; x < 24; x++) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else{
+	      *pch++=' ';
+	    }
             *pch++ = ' ';
         }
-
         *pch++ = '|';
         *pch++ = ' ';
 
-        for (x = 0; x < 3; x++)
-            *pch++ = (cOffO > 5 * x + y) ? 'O' : ' ';
-
-        *pch++ = ' ';
+        for (x = 0; x < 3; x++){
+            /* *pch++ = (cOffO > 5 * x + y) ? 'O' : ' '; */
+	  if (cOffO > 5 * x + y){
+	    pch += sprintf(pch, "\033[0;31mO\033[0m");
+	  }
+	  else {
+	    *pch++ = ' ';
+	  }
+	}
+	*pch++ = ' ';
 
         if (y < 2 && asz[y + 1])
             for (pchIn = asz[y + 1]; *pchIn; pchIn++)
@@ -142,19 +171,32 @@ DrawBoardStd(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
     for (x = 12; x < 18; x++) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
         *pch++ = ' ';
     }
 
     *pch++ = '|';
     *pch++ = ' ';
-    *pch++ = achO[anBoard[0][24]];
+    /* *pch++ = achO[anBoard[0][24]]; */
+    pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][24]]);
     *pch++ = ' ';
     *pch++ = '|';
 
     for (; x < 24; x++) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
         *pch++ = ' ';
     }
 
@@ -162,9 +204,15 @@ DrawBoardStd(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
     *pch++ = ' ';
 
-    for (x = 0; x < 3; x++)
-        *pch++ = (cOffO > 5 * x + 4) ? 'O' : ' ';
-
+    for (x = 0; x < 3; x++){
+      /* *pch++ = (cOffO > 5 * x + 4) ? 'O' : ' '; */
+      if (cOffO > 5 * x + 4){
+	pch += sprintf(pch, "\033[0;31mO\033[0m");
+      }
+      else {
+	*pch++ = ' ';
+      }
+    }
     *pch++ = '\n';
 
     *pch++ = fRoll ? 'v' : '^';
@@ -182,19 +230,32 @@ DrawBoardStd(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
     for (x = 11; x > 5; x--) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
         *pch++ = ' ';
     }
 
     *pch++ = '|';
     *pch++ = ' ';
-    *pch++ = achX[anBoard[1][24]];
+    /* *pch++ = achX[anBoard[1][24]]; */
+    pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][24]]);
     *pch++ = ' ';
     *pch++ = '|';
 
     for (; x < UINT_MAX; x--) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
         *pch++ = ' ';
     }
 
@@ -202,9 +263,15 @@ DrawBoardStd(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
     *pch++ = ' ';
 
-    for (x = 0; x < 3; x++)
-        *pch++ = (cOffX > 5 * x + 4) ? 'X' : ' ';
-
+    for (x = 0; x < 3; x++){
+        /* *pch++ = (cOffX > 5 * x + 4) ? 'X' : ' '; */
+      if (cOffX > 5 * x + 4){
+	pch += sprintf(pch, "\033[0;32mX\033[0m");
+      }
+      else {
+	*pch++ = ' ';
+      }
+    }
     *pch++ = '\n';
 
     for (y = 3; y < UINT_MAX; y--) {
@@ -213,28 +280,58 @@ DrawBoardStd(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
         for (x = 11; x > 5; x--) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else{
+	      *pch++=' ';
+	    }
             *pch++ = ' ';
         }
 
         *pch++ = '|';
         *pch++ = ' ';
-        *pch++ = anBoard[1][24] > y ? 'X' : ' ';
+        /* *pch++ = anBoard[1][24] > y ? 'X' : ' '; */
+	if (anBoard[1][24] > y){
+	  pch += sprintf(pch, "\033[0;32mX\033[0m");
+	}
+	else {
+	  *pch++= ' ';
+	}
         *pch++ = ' ';
         *pch++ = '|';
 
         for (; x < UINT_MAX; x--) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else{
+	      *pch++=' ';
+	    }
             *pch++ = ' ';
         }
 
         *pch++ = '|';
         *pch++ = ' ';
 
-        for (x = 0; x < 3; x++)
-            *pch++ = (cOffX > 5 * x + y) ? 'X' : ' ';
-
+        for (x = 0; x < 3; x++){
+	  /* *pch++ = (cOffX > 5 * x + y) ? 'X' : ' '; */
+	  if (cOffX > 5 * x + y){
+	    pch += sprintf(pch, "\033[0;32mX\033[0m");
+	  }
+	  else {
+	    *pch++= ' ';
+	  }
+	}
         *pch++ = ' ';
 
         if (y < 2 && asz[5 - y])
@@ -326,27 +423,60 @@ DrawBoardCls(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
     for (y = 0; y < 4; y++) {
 
-        for (x = 2; x < UINT_MAX; x--)
-            *pch++ = (cOffO > 5 * x + y) ? 'O' : ' ';
+      for (x = 2; x < UINT_MAX; x--){
+            /* *pch++ = (cOffO > 5 * x + y) ? 'O' : ' '; */
+	    if (cOffO > 5 * x + y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else {
+	      *pch++ = ' ';
+	    }
+      }
 
         *pch++ = ' ';
         *pch++ = '|';
 
         for (x = 23; x > 17; x--) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else {
+	      *pch++ = ' ';
+	    }
+	    
             *pch++ = ' ';
         }
 
         *pch++ = '|';
         *pch++ = ' ';
-        *pch++ = anBoard[0][24] > y ? 'O' : ' ';
+        /* *pch++ = anBoard[0][24] > y ? 'O' : ' '; */
+	if (cOffO > 5 * x + y){
+	  pch += sprintf(pch, "\033[0;31mO\033[0m");
+	}
+	else {
+	  *pch++ = ' ';
+	}
         *pch++ = ' ';
         *pch++ = '|';
 
         for (; x > 11; x--) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	     pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else {
+	      *pch++ = ' ';
+	    }
+
             *pch++ = ' ';
         }
 
@@ -360,27 +490,48 @@ DrawBoardCls(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
         *pch++ = '\n';
     }
 
-    for (x = 2; x < UINT_MAX; x--)
-        *pch++ = (cOffO > 5 * x + 4) ? 'O' : ' ';
+    for (x = 2; x < UINT_MAX; x--){
+      /* *pch++ = (cOffO > 5 * x + 4) ? 'O' : ' '; */
+      if (cOffO > 5 * x + 4){
+	pch += sprintf(pch, "\033[0;31mO\033[0m");
+      }
+      else {
+	*pch++ = ' ';
+      }
+    }
+
 
     *pch++ = ' ';
     *pch++ = '|';
 
     for (x = 23; x > 17; x--) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
         *pch++ = ' ';
     }
 
     *pch++ = '|';
     *pch++ = ' ';
-    *pch++ = achO[anBoard[0][24]];
+    /* *pch++ = achO[anBoard[0][24]]; */
+    pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][24]]);
     *pch++ = ' ';
     *pch++ = '|';
 
     for (; x > 11; x--) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
         *pch++ = ' ';
     }
 
@@ -402,27 +553,46 @@ DrawBoardCls(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
     *pch++ = '\n';
 
-    for (x = 2; x < UINT_MAX; x--)
-        *pch++ = (cOffX > 5 * x + 4) ? 'X' : ' ';
-
+    for (x = 2; x < UINT_MAX; x--){
+      /* *pch++ = (cOffX > 5 * x + 4) ? 'X' : ' '; */
+      if (cOffO > 5 * x + 4){
+	pch += sprintf(pch, "\033[0;32mX\033[0m");
+      }
+      else {
+	*pch++ = ' ';
+      }
+    }
     *pch++ = ' ';
     *pch++ = '|';
 
     for (x = 0; x < 6; x++) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
         *pch++ = ' ';
     }
 
     *pch++ = '|';
     *pch++ = ' ';
-    *pch++ = achX[anBoard[1][24]];
+    /* *pch++ = achX[anBoard[1][24]]; */
+    pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][24]]);
     *pch++ = ' ';
     *pch++ = '|';
 
     for (; x < 12; x++) {
         *pch++ = ' ';
-        *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]];
+        /* *pch++ = anBoard[1][x] ? achX[anBoard[1][x]] : achO[anBoard[0][23 - x]]; */
+	if (anBoard[1][x]){
+	  pch += sprintf(pch,"\033[0;32m%c\033[0m",achX[anBoard[1][x]]);
+	}
+	else {
+	  pch += sprintf(pch,"\033[0;31m%c\033[0m",achO[anBoard[0][23 - x]]);
+	}
         *pch++ = ' ';
     }
 
@@ -435,27 +605,57 @@ DrawBoardCls(char *sz, const TanBoard anBoard, int fRoll, char *asz[], char *szM
 
     for (y = 3; y < UINT_MAX; y--) {
 
-        for (x = 2; x < UINT_MAX; x--)
-            *pch++ = (cOffX > 5 * x + y) ? 'X' : ' ';
-
+      for (x = 2; x < UINT_MAX; x--){
+            /* *pch++ = (cOffX > 5 * x + y) ? 'X' : ' '; */
+	    if (cOffX > 5 * x + y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else {
+	      *pch++ = ' ';
+	    }
+      }
         *pch++ = ' ';
         *pch++ = '|';
 
         for (x = 0; x < 6; x++) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else {
+	      *pch++ = ' ';
+	    }
             *pch++ = ' ';
         }
 
         *pch++ = '|';
         *pch++ = ' ';
         *pch++ = anBoard[1][24] > y ? 'X' : ' ';
+	if (anBoard[1][24] > y){
+	  pch += sprintf(pch, "\033[0;32mX\033[0m");
+	}
+	else {
+	  *pch++ = ' ';
+	}
         *pch++ = ' ';
         *pch++ = '|';
 
         for (; x < 12; x++) {
             *pch++ = ' ';
-            *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' ';
+            /* *pch++ = anBoard[1][x] > y ? 'X' : anBoard[0][23 - x] > y ? 'O' : ' '; */
+	    if (anBoard[1][x] > y){
+	      pch += sprintf(pch, "\033[0;32mX\033[0m");
+	    }
+	    else if (anBoard[0][23 - x] > y){
+	      pch += sprintf(pch, "\033[0;31mO\033[0m");
+	    }
+	    else {
+	      *pch++ = ' ';
+	    }
             *pch++ = ' ';
         }
 

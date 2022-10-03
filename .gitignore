@@ -186,3 +186,11 @@ external_y.h
 sgf_l.c
 sgf_y.c
 sgf_y.h
+aclocal.m4
+compile
+depcomp
+missing
+po/cs.gmo
+po/da.gmo
+po/el.gmo
+po/ro.gmo
